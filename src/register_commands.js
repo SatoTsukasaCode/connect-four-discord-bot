@@ -1,10 +1,22 @@
 require("dotenv").config();
-const { REST, Routes, SlashCommandBuilder } = require("discord.js");
+const { REST, Routes, SlashCommandBuilder, ApplicationCommandOptionBase, ApplicationCommandOptionType } = require("discord.js");
 
 const commands = [
     new SlashCommandBuilder()
         .setName("game")
-        .setDescription("Start Connect Four"),
+        .setDescription("Start Connect Four")
+        .addStringOption(option => 
+            option.setName("playerone")
+            .setDescription("Player one for the gane")
+            .setType(ApplicationCommandOptionType.String)
+            .setRequired(true)
+        )
+        .addStringOption(option => 
+            option.setName("playertwo")
+            .setDescription("Player two for the gane")
+            .setType(ApplicationCommandOptionType.String)
+            .setRequired(true)
+        )
 ].map(command => command.toJSON());
 
 const rest = new REST({version: '10'}).setToken(process.env.TOKEN);
