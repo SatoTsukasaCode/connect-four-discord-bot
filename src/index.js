@@ -1,5 +1,8 @@
 require('dotenv').config();
-const { Client, IntentsBitField } = require('discord.js');
+const { Client, IntentsBitField, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const  { createButtons } =  require('./game.js')    ;
+
+const EMPTY_ROW = ":record_button: ".repeat(7).slice(0, -1);
 
 const client = new Client({
     intents: [
@@ -30,10 +33,44 @@ client.on('interactionCreate', (interaction) => {
     }
 
     if(interaction.commandName == "game") {
-        const player_one = interaction.options.get('playerone').value;
-        const player_two = interaction.options.get('playertwo').value;
+        const player_one = interaction.options.getMember('playerone');
+        const player_two = interaction.options.getMember('playertwo');
 
-        interaction.reply(player_one + " vs " + player_two);
+        if(player_one == player_two) {
+            interaction.reply("Cannot play with yourself.");
+            return;
+        }
+
+        const game_buttons = createButtons();
+
+        const embed = new EmbedBuilder()
+            .setTitle("Connect Four")
+            .setDescription("A Game of Connect Four")
+            //Yellow
+            .setColor(0xcced13)
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW })
+            .addFields({ name: " ", value: EMPTY_ROW });
+
+        const buttons = new ActionRowBuilder()
+            .addComponents(game_buttons.left, game_buttons.confirm, game_buttons.right);
+        
+
+        interaction.reply({ 
+            content: `${player_one.user.globalName} vs ${player_two.globalName}`,
+            embeds: [embed],
+            components: [buttons]
+         });
+    }
+    
+    console.log(interaction);
+
+    if(interaction.customId == "rightButton" || interaction.customId === "leftButton" || interaction.customId === "confrimButton") {
+        console.log("Button interaction");
     }
 });
 

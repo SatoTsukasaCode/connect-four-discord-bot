@@ -5,16 +5,14 @@ const commands = [
     new SlashCommandBuilder()
         .setName("game")
         .setDescription("Start Connect Four")
-        .addStringOption(option => 
+        .addMentionableOption(option => 
             option.setName("playerone")
-            .setDescription("Player one for the gane")
-            .setType(ApplicationCommandOptionType.String)
+            .setDescription("Player one for the game")
             .setRequired(true)
         )
-        .addStringOption(option => 
+        .addMentionableOption(option => 
             option.setName("playertwo")
-            .setDescription("Player two for the gane")
-            .setType(ApplicationCommandOptionType.String)
+            .setDescription("Player two for the game")
             .setRequired(true)
         )
 ].map(command => command.toJSON());
